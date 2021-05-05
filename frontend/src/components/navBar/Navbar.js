@@ -38,10 +38,10 @@ function Navbar() {
                                 </Link>
                             </li>
                             <li className='nav-item'>
-                                <Link to='/addNews'
+                                <Link to='/addBlog'
                                     className='nav-links'
                                     onClick={closeMobileMenu}>
-                                    Add News
+                                    Add Blog
                                 </Link>
                             </li>
                         </ul>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CardContent, CardActions, CardMedia, Card, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import './NewsDetails.css'
+import './BlogDetails.css'
 import axios from 'axios';
 import waves from '../images/waves.jpg';
 require('dotenv').config();
@@ -23,26 +23,26 @@ const useStyles = makeStyles({
     }
 })
 
-export default function NewsDetails(props) {
+export default function BlogDetails(props) {
     const classes = useStyles();
     const { history } = props;
-    const [singleNews, setSingleNews] = useState([]);
+    const [singleBlog, setSingleBlog] = useState([]);
     const url = process.env.REACT_APP_SERVER_API;
+    const { match: { params } } = props; 
 
-    const fetchSingleNews = async () => {
-        const { match: { params } } = props;
-        const response = await axios.get(`${url}${params.newsId}`);
+    const fetchSingleBlog = async (id) => {
+        const response = await axios.get(`${url}${id}`);
         const data = response.data;
-        setSingleNews([...singleNews,data])
+        setSingleBlog([...singleBlog, data])
     }
    
     useEffect(() => {
-        fetchSingleNews();
+        fetchSingleBlog(params.blogId);
     }, [])
 
     return (
         <>
-            {singleNews.map(el =>
+            {singleBlog.map(el =>
                 <Card key={el._id} className={classes.container}>
                        <CardMedia className={classes.media}
                             component='img'

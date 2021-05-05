@@ -2,9 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from '../navBar/Navbar';
 import HomePage from '../homePage/HomePage';
-import AddNews from '../News/AddNews';
-import NewsDetails from '../News/NewsDetails';
-import EditNews from '../News/EditNews'
+import Add_Edit_Blog from '../Blogs/Add_Edit_Blog';
+import BlogDetails from '../Blogs/BlogDetails';
 
 
 export default function MainComponent(props) {
@@ -18,12 +17,13 @@ export default function MainComponent(props) {
                     </Route>
                     <Route exact path='/home' component={HomePage}>
                     </Route>
-                    <Route path='/addNews' component={AddNews}>
+                    < Route path='/details/:blogId' component={BlogDetails}>
                     </Route>
-                    <Route path='/:id' component={EditNews}>
+                    <Route path='/addBlog' component={Add_Edit_Blog}>
                     </Route>
-                    < Route path='/:newsId' component={NewsDetails}>
+                     <Route  path='/:id' component={Add_Edit_Blog}>
                     </Route>
+
                 </Switch>
             </Router>
         </>

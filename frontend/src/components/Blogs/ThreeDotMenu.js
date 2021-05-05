@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom';
 require('dotenv').config();
 
 const options = [
-  'Edit News',
-  'Delete News'
+  'Edit Blog',
+  'Delete Blog'
 ]
 const useStyles = makeStyles({
   link: {
@@ -21,6 +21,7 @@ export default function ThreeDotMenu(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const url = process.env.REACT_APP_SERVER_API;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,7 +29,7 @@ export default function ThreeDotMenu(props) {
 
 
   const onDeleteClick = () => {
-    props.deleteNews(props.news._id)
+    props.deleteBlog(props.blogs._id)
   }
 
   const handleClose = () => {
@@ -59,9 +60,9 @@ export default function ThreeDotMenu(props) {
       >
         <div >
           <Link className={classes.link} to={{
-            pathname: `${props.news._id}`,
+            pathname: `${props.blogs._id}`,
             state: {
-              targetedNews: props.news
+              targetedBlog: props.blogs
             }
           }
           }  > <MenuItem>

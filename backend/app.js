@@ -20,18 +20,18 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 // routing
 
 app.get('/', async (req, res) => {
-   const news = await Blog.find();
-   console.log(news)
-   res.status(200).send({ news: news })
+   const blogs = await Blog.find();
+   console.log(blogs)
+   res.status(200).send({ blogs: blogs })
 })
 
 app.get('/:id', async (req, res) => {
    let id = req.params.id;
-   let getNewsById = await Blog.findById(id);
-   res.status(200).send(getNewsById);
-   console.log('News with id ' + req.params.id + ' is found')
+   let blogById = await Blog.findById(id);
+   res.status(200).send(blogById);
+   console.log('Blog with id ' + req.params.id + ' is found')
 })
-app.post('/', async (req, res) => {
+app.post('/addBlog', async (req, res) => {
    try {
       await Blog.findOne({ title: req.body.title }, (err, blog) => {
          if (err) console.log(err)
@@ -55,7 +55,7 @@ app.post('/', async (req, res) => {
       const body = req.body;
       console.log(body)
       await Blog.findByIdAndUpdate(id, { title: body.title, content: body.content },
-         function (err, group) {
+         function (err, blog) {
             if (err) {
                console.log(err)
             }

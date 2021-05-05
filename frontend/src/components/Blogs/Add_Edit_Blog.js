@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './AddNews.css';
+import './Add_Edit_Blog.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function EditNews(props) {
+export default function Add_Edit_Blog(props) {
     const classes = useStyles();
     const { history } = props;
-  
-    const [news, setNews] = useState({
+
+    const [blogs, setBlogs] = useState({
         title: '',
         content: '',
     });
@@ -42,26 +42,17 @@ export default function EditNews(props) {
     const url = process.env.REACT_APP_SERVER_API;
 
     const handleChange = (event) => {
-        setNews({ ...news, [event.target.name]: event.target.value });
+        setBlogs({ ...blogs, [event.target.name]: event.target.value });
 
     };
     const handleCapture = (event) => {
         setSelectedImage(event.target.files[0]);
     };
-     
-      const fetchSingleNews = async (id) => {
-          if(id){
-        const response=  await axios.get(`${url}${id}`);
-        const data= response.data;
-        setNews(data);
-      }
-    }
-    useEffect (()=>{
-        fetchSingleNews(props.location.state.targetedNews._id)
-    },[])
-    /*  useEffect(() => {
-         setNews({ ...news, image: selectedImage });
-     }, [selectedImage]) */
+
+
+    useEffect(() => {
+        setBlogs({ ...blogs, image: selectedImage });
+    }, [selectedImage])
 
     const backToHomePage = () => {
         history.push('/home');
@@ -70,12 +61,12 @@ export default function EditNews(props) {
         const titleError = {};
         const contentError = {};
         let isValid = true;
-        if (news.title.trim().length === 0) {
+        if (blogs.title.trim().length === 0) {
             titleError.input = 'Please enter title';
             titleError.notValid = true;
             isValid = false;
         }
-        if (news.content.trim().length === 0) {
+        if (blogs.content.trim().length === 0) {
             contentError.input = 'Please enter content';
             contentError.notValid = true;
             isValid = false;
@@ -84,31 +75,45 @@ export default function EditNews(props) {
         setContentError(contentError);
         return isValid;
     };
-    const edit_News = async (news) => {
-           await axios.put(`${url}${news._id}`,news)
-           backToHomePage();
+    const fetchSingleBlog = async (id) => {
+        const response = await axios.get(`${url}${id}`);
+        const data = response.data;
+        setBlogs(data);
     }
-  
-    const submitNews =  (e) => {
-        e.preventDefault();
-        const validate = validateInputs();
-        if (validate) {
-           edit_News(news) ;
+    useEffect(() => {
+        if (props.location.state) {
+            fetchSingleBlog(props.location.state.targetedBlog._id)
         }
-
+    }, [])
+    const add_Blog = async () => {
+        await axios.post(`${url}addBlog`, blogs);
+        backToHomePage();
     }
-    const cancelNews = () => {
+    const edit_Blog = async () => {
+        await axios.put(`${url}${blogs._id}`, blogs)
         backToHomePage();
     }
 
+    const submitBlog = (e) => {
+        e.preventDefault();
+        const validate = validateInputs();
+        if (validate) {
+            if (blogs._id) return edit_Blog()
+            add_Blog();
+        }
+
+    }
+    const cancelBlog = () => {
+        backToHomePage();
+    }
     return (
         <div className='addNews-body' >
-            <form className={classes.root} onSubmit={submitNews}  >
+            <form className={classes.root} onSubmit={submitBlog}  >
                 <div className='addNews-inputs'>
                     <TextField id="filled-basic"
                         name='title'
                         label="Title"
-                        value={news.title}
+                        value={blogs.title}
                         onChange={handleChange}
                         helperText={titleError.input}
                         error={titleError.notValid}
@@ -117,7 +122,7 @@ export default function EditNews(props) {
                     <TextField
                         name="content"
                         label="Content"
-                        value={news.content}
+                        value={blogs.content}
                         onChange={handleChange}
                         helperText={contentError.input}
                         error={contentError.notValid}
@@ -127,14 +132,14 @@ export default function EditNews(props) {
                     />
                     <  input
                         accept="image/jpeg"
-                        id="faceImage"
+                        id="newsImage"
                         type="file"
                         name='image'
                         onChange={handleCapture}
                         className={classes.input}
                     />
                     <Tooltip title="Select Image">
-                        <label htmlFor="faceImage">
+                        <label htmlFor="newsImage">
                             <IconButton
                                 color="primary"
                                 aria-label="upload picture"
@@ -145,12 +150,12 @@ export default function EditNews(props) {
                             </IconButton>
                         </label>
                     </Tooltip>
-                    <label>{news.image ? news.image.name : "Select Image"}</label>
+                    <label>{blogs.image ? blogs.image.name : "Select Image"}</label>
                     <div className='addNews-btns'>
                         <Button type='submit' variant="contained" color="primary" >
-                            Add News
+                            Add Blog
                   </Button>
-                        <Button variant="contained" color="secondary" onClick={cancelNews}>
+                        <Button variant="contained" color="secondary" onClick={cancelBlog}>
                             Cancel
                   </Button>
                     </div>

@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import waves from '../images/waves.jpg'
-import ThreeDotMenu from '../News/ThreeDotMenu';
+import ThreeDotMenu from '../Blogs/ThreeDotMenu';
 require('dotenv').config();
 
 
@@ -32,34 +32,34 @@ export default function HomePage(props) {
     const url = process.env.REACT_APP_SERVER_API;
     const { history } = props;
 
-    const [allNews, setAllNews] = useState([]);
-    console.log(allNews)
+    const [allBlogs, setAllBlogs] = useState([]);
+    console.log(allBlogs)
 
     useEffect(() => {
-        fetchAllNews();
+        fetchAllBlogs();
     }, [])
 
     // fetch data from API
-    const fetchAllNews = async () => {
+    const fetchAllBlogs = async () => {
         const response = await axios.get(url)
         const data = response.data;
-        setAllNews(data.news)
+        setAllBlogs(data.blogs)
     }
-    const displaySingleNews = async (news) => {
-        history.push( news._id);
+    const displaySingleBlog = async (blogs) => {
+        history.push( `details/${blogs._id}`);
     }
-    const deleteNews= async (id) => {
+    const deleteBlog= async (id) => {
         const response= await axios.delete(`${url}${id}`);
-         const deletedNews= allNews.filter(el=>el._id !== id);
-      setAllNews(deletedNews)
+         const deletedBlog= allBlogs.filter(el=>el._id !== id);
+      setAllBlogs(deletedBlog)
      }
     return (
         <>
             <Grid container spacing={2} className={classes.container} >
-                {allNews.map(el =>
+                {allBlogs.map(el =>
                     <Grid key={el._id} item xs={12} sm={6} md={4}  >
                         <Card >
-                        <ThreeDotMenu  news= {el} allNews={allNews} deleteNews={deleteNews}></ThreeDotMenu>
+                        <ThreeDotMenu  blogs= {el} allBlogs={allBlogs} deleteBlog={deleteBlog}></ThreeDotMenu>
                             <CardMedia className={classes.media}
                                 component='img'
                                 src={waves}
@@ -73,7 +73,7 @@ export default function HomePage(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" color="primary" variant='outlined' onClick={() => displaySingleNews(el)}>
+                                <Button size="small" color="primary" variant='outlined' onClick={() => displaySingleBlog(el)}>
                                     Learn More
                             </Button>
                             </CardActions>
